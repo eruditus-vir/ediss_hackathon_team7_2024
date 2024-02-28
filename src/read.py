@@ -1,3 +1,8 @@
+import pandas as pd
+
+def load_data_xlsx(file_path):
+    return pd.read_excel(file_path)
+
 def read_and_print_file(file_path):
     """
     Reads a file from the given path and prints its contents.
@@ -13,3 +18,5 @@ def read_and_print_file(file_path):
         print(f"File not found: {file_path}")
     except IOError:
         print(f"Error reading file: {file_path}")
+
+
