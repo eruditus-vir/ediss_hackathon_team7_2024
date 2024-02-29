@@ -1,3 +1,8 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.feature_selection import mutual_info_regression
+
+
 def remove_invalid_data(df, columns_with_defined_valid_values=None):
     """
     Remove invalid data from the DataFrame.
@@ -100,3 +105,29 @@ def train_test_split_divide_laps(feature_track_df, number_of_ids=4):
     result_df = merged_df[merged_df['_merge'] == 'left_only'].drop('_merge', axis=1)
 
     return result_df, result_test
+
+def selection_top_features(cleaned_feature_track, number_of_features=20):
+    X = cleaned_feature_track.drop('risk_outcome', axis=1)
+    y = cleaned_feature_track['risk_outcome']
+
+    # Calculate mutual information
+    mi = mutual_info_regression(X, y)
+    mi_series = pd.Series(mi, index=X.columns)
+
+    # Remove features starting with "car_" or "Car_"
+    mi_series = mi_series[~mi_series.index.str.startswith('car_') & ~mi_series.index.str.startswith('Car_')]
+
+    # Sort the series after filtering
+    mi_series = mi_series.sort_values(ascending=False)
+
+    # Plotting
+    plt.figure(figsize=(10, 30))
+    sns.barplot(x=mi_series.values, y=mi_series.index)
+    plt.title('Mutual Information with Risk Outcome')
+    plt.xlabel('Mutual Information Score')
+    plt.ylabel('Features')
+    plt.show()
+
+    # Get top 10 features based on mutual information scores after filtering
+    top_features = mi_series.head(number_of_features)
+    return top_features
