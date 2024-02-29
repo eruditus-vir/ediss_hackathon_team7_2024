@@ -54,3 +54,49 @@ def train_test_split_custom(feature_track_df, number_of_ids=4):
     result_df = merged_df[merged_df['_merge'] == 'left_only'].drop('_merge', axis=1)
 
     return result_df, filtered_df
+
+
+def train_test_split_divide_laps(feature_track_df, number_of_ids=4):
+
+    while True:
+        random_ids = feature_track_df['subject'].sample(n=number_of_ids).tolist()
+
+        haves = 0
+        for id in random_ids:
+            if len(feature_track_df["risk_outcome"].value_counts()) > 1:
+                haves +=1
+
+        if haves >= int(number_of_ids/2):
+            break
+
+    # random_ids will contain n randomly selected subject IDs
+    print(haves)
+    print(random_ids)
+
+    filtered_df = feature_track_df[feature_track_df['subject'].isin(random_ids)]
+
+    all_ids_filtered = []
+
+    for id in random_ids:
+        filter_results = []
+        id_df = filtered_df[filtered_df.subject == id]
+        laps = list(id_df.lap.value_counts().index)
+        print(laps)
+
+        for i in range(0, len(laps), 2):
+            print(i)
+            filter_results.append(id_df[id_df.lap == laps[i]])
+            i+=2 # missing one index
+
+        final_result_per_id = pd.concat(filter_results)
+
+        all_ids_filtered.append(final_result_per_id)
+
+    result_test = pd.concat(all_ids_filtered)
+
+    merged_df = feature_track_df.merge(result_test, indicator=True, how='outer')
+
+    # Filter out the rows that are from the subset
+    result_df = merged_df[merged_df['_merge'] == 'left_only'].drop('_merge', axis=1)
+
+    return result_df, result_test
