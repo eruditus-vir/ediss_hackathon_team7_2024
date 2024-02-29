@@ -22,7 +22,7 @@ def remove_invalid_data(df, columns_with_defined_valid_values=None):
     return cleaned_df
 
 
-def train_test_split(feature_track_df, number_of_ids):
+def train_test_split_custom(feature_track_df, number_of_ids=4):
 
     while True:
         random_ids = feature_track_df['subject'].sample(n=number_of_ids).tolist()
