@@ -49,6 +49,21 @@ neurophysiological_data_columns = [
     "UpperBetaParietal"
 ]
 
+event_flags_columns = [
+    'straight',
+    'roundabout_entry',
+    'roundabout_exit',
+    'zebra_crossing',
+    'left_turn',
+    'u_turn',
+    'bypass_dummy',
+    'car',
+    'pedestrian',
+    'traffic_light',
+    'narrow_road',
+    'dummy',
+    'bend'
+]
 
 video_data_analysis_columns = [
     "straight",

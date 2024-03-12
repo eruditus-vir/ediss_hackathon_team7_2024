@@ -14,8 +14,9 @@ def plot_correlation_matrices(simulated_df, tracked_df, features_to_correlate):
     sim_corr = simulated_df[features_to_correlate].corr()
     track_corr = tracked_df[features_to_correlate].corr()
 
+    fsize = len(features_to_correlate) * 1
     # Plotting
-    fig, ax = plt.subplots(1, 2, figsize=(20, 10))
+    fig, ax = plt.subplots(1, 2, figsize=(fsize*2, fsize))
 
     sns.heatmap(sim_corr, annot=True, cmap='coolwarm', ax=ax[0])
     ax[0].set_title('Correlation Matrix - Simulated Dataset')
